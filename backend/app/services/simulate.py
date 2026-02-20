@@ -3,7 +3,7 @@
 
 import random
 from datetime import datetime
-from app.models import SensorReading
+from models import SensorReading
 from database import get_db
 
 class BaseSensor:
@@ -24,9 +24,11 @@ class BaseSensor:
         }
 
     def save_reading(self, reading):
+        db_session = next(get_db())
         db_reading = SensorReading(**reading)
-        self.db_session.add(db_reading)
-        self.db_session.commit()
+        db_session.add(db_reading)
+        db_session.commit()
+        db_session.close()
 
 
 import threading

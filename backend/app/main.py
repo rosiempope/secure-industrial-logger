@@ -15,6 +15,10 @@ sensor_manager.add_sensor(BaseSensor("T1", 200, 350, db))
 sensor_manager.add_sensor(BaseSensor("P1", 10, 25, db))
 sensor_manager.add_sensor(BaseSensor("F1", 5, 15, db))
 
+@app.get("/")
+def root():
+    return {"message": "API running"}
+
 @app.on_event("startup")
 def start_sensors():
     sensor_manager.run()
@@ -29,5 +33,7 @@ def health_check():
 
 @app.get("/sensors/latest")
 def get_latest_readings():
+    db = next(get_db())
     readings = db.query(SensorReading).order_by(SensorReading.timestamp.desc()).limit(10).all()
+    db.close()
     return readings
