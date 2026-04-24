@@ -30,7 +30,6 @@ class BaseSensor:
         db_session.commit()
         db_session.close()
 
-
 import threading
 import time
 
